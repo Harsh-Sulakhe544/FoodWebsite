@@ -1,0 +1,45 @@
+<!-- myapp/templates/main_course.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Main Course Foods</title>
+</head>
+<body>
+    {% include 'notification_banner.html' %}
+    <h1>Main Course Foods</h1>
+    <ol>
+        {% for food in foods %}
+        <li>
+            <img src="{{ food.image.url }}" alt="{{ food.name }}" width="100">
+            <br>
+            <strong>{{ food.name }}</strong> - {{ food.description }}
+            <br>
+            Price: ${{ food.price }} 
+            <br>
+            Resto: {{ food.brand_name }}
+            <br>
+            Product ID: {{ food.product_id }} 
+            <br>
+            Rating: {{ food.rating }}
+            <br>
+            <button onclick="addToCart('main_course', {{ food.id }})">Add to Cart</button>
+        </li>
+        <br>
+        {% endfor %}
+    </ol>
+    <a href="{% url 'view_cart' %}">View Cart</a>
+
+    <script>
+    function addToCart(productType, productId) {
+        fetch(`/cart/add/${productType}/${productId}/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Item added to cart');
+                }
+            });
+    }
+    </script>
+</body>
+</html>
+{% include 'footer.html' %}

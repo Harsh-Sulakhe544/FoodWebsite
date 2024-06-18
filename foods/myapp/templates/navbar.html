@@ -1,0 +1,132 @@
+<!-- myapp/templates/navbar.html -->
+<nav>
+    <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'about' %}">About Us</a></li>
+        <li><a href="{% url 'contact' %}">Contact Us</a></li>
+        <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn">Menu</a>
+            <div class="dropdown-content">
+                <a href="{% url 'starter' %}">Starter</a>
+                <a href="{% url 'mainCourse' %}">Main Course</a>
+                <a href="{% url 'dessert' %}">Dessert</a>
+            </div>
+        </li>
+
+        <li><a href="{% url 'register' %}">Register</a></li>
+        <li><a href="{% url 'login' %}">Login</a></li> 
+        
+        <li class="search-bar">
+            <form action="{% url 'search' %}" method="get">
+                <input type="text" name="q" placeholder="Search...">
+                <button type="submit">Search</button>
+            </form>
+        </li>
+    </ul>
+</nav>
+
+<style>
+    /* Add some basic styles for the navigation bar */
+    nav {
+        background-color: #333;
+        overflow: hidden;
+    }
+    
+    nav ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    nav ul li {
+        float: left;
+    }
+    
+    nav ul li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+    
+    nav ul li a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+    
+    .dropdown {
+        float: left;
+        overflow: hidden;
+    }
+    
+    .dropdown .dropbtn {
+        cursor: pointer;
+        font-size: 16px;
+        border: none;
+        outline: none;
+        color: white;
+        padding: 14px 16px;
+        background-color: inherit;
+        font-family: inherit;
+        margin: 0;
+    }
+    
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+    
+    .dropdown-content a {
+        float: none;
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+    }
+    
+    .dropdown-content a:hover {
+        background-color: #ddd;
+    }
+    
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    /* CSS to position the search bar at the right-most top corner */
+    .search-bar {
+        margin-left: auto;
+    }
+
+    .search-bar form {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-bar input[type="text"] {
+        padding: 6px;
+        margin-right: 8px;
+        border: none;
+        border-radius: 4px;
+    }
+
+    .search-bar button {
+        padding: 6px 10px;
+        border: none;
+        background-color: #ddd;
+        color: black;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .search-bar button:hover {
+        background-color: #ccc;
+    }
+</style>

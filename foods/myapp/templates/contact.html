@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        .contact-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .contact-container h1, .contact-container h2 {
+            text-align: center;
+            color: #333;
+        }
+        .contact-container form {
+            display: flex;
+            flex-direction: column;
+        }
+        .contact-container label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .contact-container input, .contact-container textarea {
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+        .contact-container button {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .contact-container button:hover {
+            background-color: #0056b3;
+        }
+        .submitted-data {
+            margin-top: 20px;
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'notification_banner.html' %}
+    <div class="contact-container">
+        <h1>Contact Us</h1>
+        <p>Please provide your information to us.</p>
+        <form method="post" action="">
+            {% csrf_token %}
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name" required><br>
+    
+            <label for="age">Age:</label><br>
+            <input type="number" id="age" name="age" required><br>
+    
+            <label for="phone">Phone Number:</label><br>
+            <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" placeholder="It should be a 10 Digit NO" required><br>
+    
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email"placeholder="It should have [a-zA-z][0-9] and @symbol and .  " required><br>
+    
+            <label for="address">Address:</label><br>
+            <input type="text" id="address" name="address" placeholder="Enter near-by location Identified Location like hospitals" required><br>
+    
+            <label for="zipcode">Zip Code:</label><br>
+            <input type="text" id="zipcode" name="zipcode" pattern="[0-9]{5}" placeholder="It should be a 5 Digit NO" required ><br>
+    
+            <label for="feedback">Feedback:</label><br>
+            <textarea id="feedback" name="feedback" 
+            placeholder="Your Idea to Improve the Platform AND Some Special Features You Desire, We Provide " required
+            ></textarea><br>
+    
+            <button type="submit">Submit</button>
+        </form>
+
+        {% if form_data %}
+        <div class="submitted-data">
+            <h2>Submitted Data</h2>
+            <ul>
+                <li><strong>Name:</strong> {{ form_data.name }}</li>
+                <li><strong>Age:</strong> {{ form_data.age }}</li>
+                <li><strong>Phone Number:</strong> {{ form_data.phone }}</li>
+                <li><strong>Email:</strong> {{ form_data.email }}</li>
+                <li><strong>Address:</strong> {{ form_data.address }}</li>
+                <li><strong>Zip Code:</strong> {{ form_data.zipcode }}</li>
+                <li><strong>Feedback:</strong> {{ form_data.feedback }}</li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+
+{% include 'footer.html' %}

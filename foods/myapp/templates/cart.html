@@ -1,0 +1,85 @@
+{% load custom_filters %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Cart</title>
+</head>
+<body>
+    {% include 'notification_banner.html' %}
+    <h1>Your Cart</h1>
+    <ol id="cart-items">
+        {% for item in cart_items %}
+        
+        <li id="cart-item-{{ item.id }}">
+            
+            <strong>{{ item.name }}</strong> - {{ item.description }}
+            <br>
+            Price: ${{ item.price }} 
+            <br>
+            Quantity: 
+            <button onclick="updateCartItem({{ item.id }}, 'decrement')">-</button>
+            <span id="quantity-{{ item.id }}">{{ item.quantity }}</span>
+            <button onclick="updateCartItem({{ item.id }}, 'increment')">+</button>
+            <br>
+            Total: $<span id="total-{{ item.id }}">{{ item.total_price }}</span>
+        </li>
+        <br>
+        {% endfor %}
+    </ol>
+    <h2>Total Bill: $<span id="total-bill">{{ total_bill}} </span></h2>
+    {% if discount > 0 %}
+    <h2>Discount: - $<span id="discount">{{ discount }}</span></h2>
+    {% endif %}
+    <h2>Discounted Total = $<span id="discounted-total">{{ discounted_total }}</span></h2>
+    <h2>CGST (2.5%): + $<span id="cgst">  {{ cgst |floatformat:"2" }}</span></h2>
+    <h2>SGST (2.5%): + $<span id="sgst">  {{ sgst |floatformat:"2"}}</span></h2>
+    <h2>Final Total = $<span id="final-total">  {{ final_total |floatformat:"2" }}</span></h2>
+    <a href="{% url 'starter' %}">Continue Shopping</a>
+
+    <script>
+    function updateCartItem(itemId, action) {
+        fetch(`/cart/update/${itemId}/${action}/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    let quantityElem = document.getElementById(`quantity-${itemId}`);
+                    let totalElem = document.getElementById(`total-${itemId}`);
+                    let totalBillElem = document.getElementById('total-bill');
+                    let newQuantity = data.quantity;
+                    let price = parseFloat(quantityElem.parentElement.querySelector('span').textContent);
+                    
+                    quantityElem.textContent = newQuantity;
+                    totalElem.textContent = (price * newQuantity).toFixed(2);
+                    
+                    // Update total bill
+                    let newTotalBill = Array.from(document.querySelectorAll('[id^="total-"]')).reduce((sum, elem) => sum + parseFloat(elem.textContent), 0);
+                    totalBillElem.textContent = newTotalBill.toFixed(2);
+                    
+                } else if (data.status === 'removed') {
+                    document.getElementById(`cart-item-${itemId}`).remove();
+                    
+                    // Update total bill
+                    let newTotalBill = Array.from(document.querySelectorAll('[id^="total-"]')).reduce((sum, elem) => sum - parseFloat(elem.textContent), 0);
+                    document.getElementById('total-bill').textContent = newTotalBill.toFixed(2);
+                }
+                
+                location.reload(); // Reload the page to reflect the changes
+            });
+    }
+    
+    // FOR OFFER 
+    window.onload = function() {
+        let finalTotal = parseFloat(document.getElementById('final-total').textContent);
+        if (finalTotal > 500) {
+            if (!localStorage.getItem('discountAlertShown')) {
+                alert('Hooray! You get the offer of $100 discount!');
+                localStorage.setItem('discountAlertShown', 'true');
+            }
+        }
+    }
+
+    </script>
+</body>
+</html>
+
+{% include 'footer.html' %}
